@@ -5,17 +5,14 @@ import re
 tokens = ('SQLINSERT', 'SQLFROM', 'SQLVALUES', 'SQLNUM', 'SQLCORRESPONDING', 'SQLBY', 'SQLNAME', 'SQLSTRING',
           'SQLCOLON', 'SQLCOMMA', 'SQLOPEN', 'SQLCLOSE')
 
-# регулярное выражение для абстрактного идетификатора
-ident = r'[A-Za-z0-9_]\w*'
-
 # определение токенов
-t_SQLINSERT = r'insert into|INSERT INTO'
-t_SQLFROM = r'from|FROM'
-t_SQLVALUES = r'values|VALUES'
-t_SQLCORRESPONDING = r'corresponding|CORRESPONDING'
-t_SQLBY = r'by|BY'
-t_SQLNAME = ident
-t_SQLSTRING = r"\'" + ident + r"'"
+t_SQLINSERT = r'(i|I)(n|N)(s|S)(e|E)(r|R)(t|T)( )+(i|I)(n|N)(t|T)(o|O)'
+t_SQLFROM = r'(F|f)(R|r)(O|o)(M|m)'
+t_SQLVALUES = r'(V|v)(A|a)(L|l)(U|u)(E|e)(S|s)'
+t_SQLCORRESPONDING = r'(c|C)(o|O)(r|R)(r|R)(e|E)(s|S)(p|P)(o|O)(n|N)(d|D)(i|I)(n|N)(g|G)'
+t_SQLBY = r'(b|B)(y|Y)'
+t_SQLNAME = r'[A-Za-z_][A-Za-z0-9_]*'
+t_SQLSTRING = r"\'\w*\'"
 t_SQLCOLON = r'\;'
 t_SQLCOMMA = r'\,'
 t_SQLNUM = r'\d+'
@@ -23,7 +20,12 @@ t_SQLOPEN = r'\('
 t_SQLCLOSE = r'\)'
 
 # игнорируем незначащие символы
-t_ignore = ' \r\n\t\f'
+t_ignore = ' \r\t\f'
+
+
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
 
 
 # обработка ошибок
